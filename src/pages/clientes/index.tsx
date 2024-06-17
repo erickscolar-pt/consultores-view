@@ -1,10 +1,12 @@
 import ClienteForm from '@/component/clienteform';
 import ClientesList from '@/component/clienteslist';
 import Modal from '@/component/modal';
-import { getClientes } from '@/services/clientesService';
-import { useState, useEffect } from 'react';
+import { AuthContexts } from '@/contexts/AuthContexts';
+import { useState, useEffect, useContext } from 'react';
 
 export default function Clientes(){
+  const { getClientes } = useContext(AuthContexts);
+
   const [clientes, setClientes] = useState([]);
   const [showModal, setShowModal] = useState(false);
 

@@ -1,11 +1,12 @@
 import Modal from '@/component/modal';
 import ProjetoForm from '@/component/projetoform';
 import ProjetosList from '@/component/projetoslist';
-import { getClientes } from '@/services/clientesService';
-import { getProjetos } from '@/services/projetoService';
-import { useState, useEffect } from 'react';
+import { AuthContexts } from '@/contexts/AuthContexts';
+import { useState, useEffect, useContext } from 'react';
 
 export default function Projetos(){
+  const { getClientes, getProjetos } = useContext(AuthContexts);
+
   const [projetos, setProjetos] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [showModal, setShowModal] = useState(false);
