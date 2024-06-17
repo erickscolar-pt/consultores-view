@@ -41,7 +41,7 @@ export default function Tarefas() {
             Adicionar Tarefa
           </button>
         </div>
-        <TarefasList tarefas={tarefas} />
+        <TarefasList tarefas={tarefas} onUpdateTarefa={fetchTarefas} />
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <TarefaForm

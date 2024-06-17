@@ -1,7 +1,7 @@
-import { useContext, useState } from 'react';
-import { toast } from 'react-toastify';
-import { AuthContexts } from '@/contexts/AuthContexts';
-import { Tarefa } from '@/model/types';
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
+import { AuthContexts } from "@/contexts/AuthContexts";
+import { Tarefa } from "@/model/types";
 
 interface TarefaFormProps {
   onClose: () => void;
@@ -9,20 +9,29 @@ interface TarefaFormProps {
   projetos: { id: number; nome: string }[];
 }
 
-export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<TarefaFormProps>){
+export default function TarefaForm({
+  onClose,
+  onSuccess,
+  projetos,
+}: Readonly<TarefaFormProps>) {
   const { createTarefa } = useContext(AuthContexts);
 
   const [tarefa, setTarefa] = useState<Tarefa>({
-    nome: '',
-    descricao: '',
-    status: '',
+    nome: "",
+    descricao: "",
+    status: "",
     projetoId: 0,
-    dataFim: '',
-    dataInicio: ''
+    dataFim: "",
+    dataInicio: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
+
     setTarefa((prevTarefa) => ({
       ...prevTarefa,
       [name]: value,
@@ -32,20 +41,29 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      if (!tarefa.projetoId) {
+        toast.warning("preencha todos os campos");
+        return;
+      }
       await createTarefa(tarefa);
       onSuccess();
       onClose();
-      toast.success('Tarefa criada com sucesso!');
+      toast.success("Tarefa criada com sucesso!");
     } catch (error) {
-      console.error('Erro ao criar tarefa:', error);
-      toast.error('Erro ao criar tarefa. Verifique os dados e tente novamente.');
+      console.error("Erro ao criar tarefa:", error);
+      toast.error(
+        "Erro ao criar tarefa. Verifique os dados e tente novamente."
+      );
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
-        <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="nome"
+          className="block text-sm font-medium text-gray-700"
+        >
           Nome
         </label>
         <input
@@ -59,7 +77,10 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="descricao" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="descricao"
+          className="block text-sm font-medium text-gray-700"
+        >
           Descrição
         </label>
         <textarea
@@ -73,7 +94,10 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="status"
+          className="block text-sm font-medium text-gray-700"
+        >
           Status
         </label>
         <select
@@ -90,7 +114,10 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         </select>
       </div>
       <div className="mb-4">
-        <label htmlFor="projetoId" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="projetoId"
+          className="block text-sm font-medium text-gray-700"
+        >
           Projeto
         </label>
         <select
@@ -110,10 +137,14 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         </select>
       </div>
       <div className="mb-4">
-        <label htmlFor="dataInicio" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="dataInicio"
+          className="block text-sm font-medium text-gray-700"
+        >
           Data de Inicio
         </label>
         <input
+          required
           type="datetime-local"
           id="dataInicio"
           name="dataInicio"
@@ -123,10 +154,14 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="dataFim" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="dataFim"
+          className="block text-sm font-medium text-gray-700"
+        >
           Data de Término
         </label>
         <input
+          required
           type="datetime-local"
           id="dataFim"
           name="dataFim"
@@ -136,13 +171,20 @@ export default function TarefaForm({ onClose, onSuccess, projetos }: Readonly<Ta
         />
       </div>
       <div className="flex justify-end">
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+        >
           Criar Tarefa
         </button>
-        <button type="button" onClick={onClose} className="bg-gray-300 text-gray-700 px-4 py-2 rounded">
+        <button
+          type="button"
+          onClick={onClose}
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+        >
           Cancelar
         </button>
       </div>
     </form>
   );
-};
+}

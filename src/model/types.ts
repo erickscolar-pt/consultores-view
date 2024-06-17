@@ -21,5 +21,5 @@ export interface Tarefa {
     projetoId: number;
     dataInicio?: string;
     dataFim?: string;
-  }
-  
+}
+
