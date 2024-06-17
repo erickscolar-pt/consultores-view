@@ -11,6 +11,7 @@ export interface Projeto {
     descricao: string;
     status: string;
     clienteId: number;
+    clienteNome: string;
 }
 
 export interface Tarefa {
@@ -19,6 +20,7 @@ export interface Tarefa {
     descricao: string;
     status: string;
     projetoId: number;
+    clienteNome?: string;
     dataInicio?: string;
     dataFim?: string;
 }

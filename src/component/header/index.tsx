@@ -17,6 +17,11 @@ export function Header() {
       name: 'Lista de tarefas',
       link: '/tarefas',
     },
+    {
+      id: 3,
+      name: 'Meus projetos',
+      link: '/projetos',
+    },
   ];
 
   return (

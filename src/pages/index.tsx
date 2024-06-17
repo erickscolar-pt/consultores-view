@@ -1,6 +1,6 @@
 import { Header } from '@/component/header';
-import Projetos from './projetos';
 import Clientes from './clientes';
+import ProjetosComponent from '@/component/projetoscomponent';
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
           </div>
           <div className="bg-white p-4 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Projetos</h2>
-            <Projetos />
+            <ProjetosComponent />
           </div>
         </div>
       </div>
