@@ -1,4 +1,3 @@
-// pages/_app.tsx
 import { AppProps } from "next/app";
 import '../../styles/globals.scss';
 import Head from "next/head";
