@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html {
     width: 100%;
     background: linear-gradient(108deg, #D8E4EF 0%, #DAE7F2 100%);
@@ -34,27 +38,6 @@ html {
     --black: #000;
     --cinza: #D6D8D9;
 }
-
-/* Works on Firefox */
-/* * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
-} */
-
-/* Works on Chrome, Edge, and Safari */
-/* *::-webkit-scrollbar {
-    width: 4px;
-}
-
-*::-webkit-scrollbar-track {
-    background: rgb(112, 111, 111);
-}
-
-*::-webkit-scrollbar-thumb {
-    background-color: rgb(56, 55, 58);
-    border-radius: 10px;
-    border: 1px solid rgb(59, 56, 56);
-} */
 
 *::-webkit-scrollbar-track
 {
