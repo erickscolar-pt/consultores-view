@@ -9,18 +9,13 @@ export function Header() {
   const links = [
     {
       id: 1,
-      name: 'Lista de clientes e projetos',
+      name: 'Lista de Clientes',
       link: '/',
     },
     {
       id: 2,
-      name: 'Lista de tarefas',
-      link: '/tarefas',
-    },
-    {
-      id: 3,
-      name: 'Meus projetos',
-      link: '/projetos',
+      name: 'Lista de Endereços',
+      link: '/enderecos',
     },
   ];
 
