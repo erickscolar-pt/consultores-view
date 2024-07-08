@@ -25,3 +25,16 @@ export interface Tarefa {
     dataFim?: string;
 }
 
+export interface AddressZipCode {
+    city:string;
+    cityId:string;
+    complement:string;
+    district:string;
+    districtId:string;
+    ibgeId:string;
+    state:string;
+    stateIbgeId:any;
+    stateShortname:string;
+    street:string;
+    zipcode:string;
+}
