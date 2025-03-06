@@ -1,0 +1,126 @@
+.chatContainer {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 30%;
+  background: #f4f4f4;
+  padding: 1rem;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .conversationList {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding: 0.75rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+
+      &.active {
+        background: #ddd;
+      }
+
+      p {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      .unreadBadge {
+        background: red;
+        color: white;
+        border-radius: 50%;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+.chatWindow {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  .chatHeader {
+    background: #3490dc;
+    color: white;
+    padding: 1rem;
+  }
+
+  .messageArea {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background: #f9f9f9;
+
+    .message {
+      max-width: 70%;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+
+      small {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #666;
+      }
+
+      &.sent {
+        background: #3490dc;
+        color: white;
+        align-self: flex-end;
+      }
+
+      &.received {
+        background: #ddd;
+        color: #333;
+        align-self: flex-start;
+      }
+    }
+  }
+
+  .inputArea {
+    padding: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    background: #fff;
+    border-top: 1px solid #ddd;
+
+    input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    button {
+      background: #38c172;
+      color: white;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
+
+  .placeholder {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+  }
+}
