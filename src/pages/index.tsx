@@ -1,99 +1,114 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { Header } from "@/component/header";
-import Clientes from "./clientes";
-import CreateClientForm from "@/component/CreateClientForm";
-import CreateAddressForm from "@/component/CreateAddressForm";
+import { AuthContexts } from "@/contexts/AuthContexts";
+import { setupAPIClient } from "@/services/api";
+import { canSSRGuest } from "@/utils/canSSRGuest";
+import { FormEvent, useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+type loginFormProps = {
+  email: string;
+  senha: string;
+};
 
 export default function Home() {
-  const [clientes, setClientes] = useState([]);
-  const [showClientForm, setShowClientForm] = useState(false);
-  const [showAddressForm, setShowAddressForm] = useState(false);
-  const [selectedClient, setSelectedClient] = useState(null);
+  const { signIn } = useContext(AuthContexts);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchClientes();
-  }, []);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const fetchClientes = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/clients`
-      );
-      setClientes(response.data);
-    } catch (error) {
-      console.error("Erro ao buscar clientes", error);
+  async function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (username === "" || password === "") {
+      toast.warning("Preencha todos os campos!");
+      return;
     }
-  };
-
-  const handleAddClient = () => {
-    setShowClientForm(true);
-  };
-
-  const handleCloseClientForm = () => {
-    setShowClientForm(false);
-  };
-
-  const handleAddAddress = (clientId) => {
-    setSelectedClient(clientId);
-    setShowAddressForm(true);
-  };
-
-  const handleCloseAddressForm = () => {
-    setShowAddressForm(false);
-    setSelectedClient(null);
-  };
+    setLoading(true);
+    let data = {
+      username,
+      password,
+    };
+    await signIn(data);
+    setLoading(false);
+  }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <Header />
-      <div className="container mx-auto p-4 pt-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Clientes</h2>
+    <div className="min-h-screen flex">
+      {/* Lado Esquerdo: Formulário de Login */}
+      <div className="w-full md:w-1/2 bg-gray-100 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          <h1 className="text-2xl font-bold mb-6">Consultor</h1>
+          <form onSubmit={onSubmit}>
             <div className="mb-4">
-              <button
-                onClick={handleAddClient}
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-              >
-                Adicionar Cliente
-              </button>
+              <label className="block text-sm font-medium mb-2">Email</label>
+              <input
+                {...register("email", {
+                  required: "Campo obrigatório",
+                  pattern: { value: /^\S+@\S+$/i, message: "Email inválido" },
+                })}
+                type="email"
+                className="w-full p-2 border rounded"
+                placeholder="Digite seu email"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {String(errors.email.message)}
+                </p>
+              )}
             </div>
-            <Clientes clientes={clientes} onAddAddress={handleAddAddress} />
-          </div>
+            <div className="mb-6">
+              <label className="block text-sm font-medium mb-2">Senha</label>
+              <input
+                {...register("senha", {
+                  required: "Campo obrigatório",
+                  minLength: { value: 6, message: "Mínimo de 6 caracteres" },
+                })}
+                type="password"
+                className="w-full p-2 border rounded"
+                placeholder="Digite sua senha"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.senha && (
+                <p className="text-red-500 text-sm mt-1">
+                  {String(errors.senha.message)}
+                </p>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-primary text-white p-2 rounded hover:bg-green-400"
+            >
+              Entrar
+            </button>
+            <div className="mt-4 text-center">
+              <a href="/cadastro" className="text-primary hover:underline">
+                Não tem uma conta? Cadastre-se aqui.
+              </a>
+            </div>
+          </form>
         </div>
       </div>
 
-      {showClientForm && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Novo Cliente</h2>
-            <CreateClientForm
-              onClose={handleCloseClientForm}
-              onSuccess={() => {
-                fetchClientes();
-                handleCloseClientForm();
-              }}
-            />
-          </div>
+      {/* Lado Direito: Logo da ContaPlus */}
+      <div className="hidden md:flex w-1/2 bg-colorLogo items-center justify-center">
+        <div className="text-white text-center">
+          <img src="/icon-pig.png" alt="Logo da ContaPlus" className="w-full" />
         </div>
-      )}
-
-      {showAddressForm && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Novo Endereço</h2>
-            <CreateAddressForm
-              clientId={selectedClient}
-              onClose={handleCloseAddressForm}
-              onSuccess={() => {
-                fetchClientes();
-                handleCloseAddressForm();
-              }}
-            />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+  const apiClient = setupAPIClient(ctx);
+
+  return {
+    props: {},
+  };
+});

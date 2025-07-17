@@ -1,55 +1,99 @@
-import { createContext, ReactNode } from 'react';
-import { api } from '../services/apiClient';
-import { Cliente, Projeto, Tarefa } from '@/model/types';
+import { createContext, ReactNode, useState } from "react";
+import { api } from "../services/apiClient";
+import { Cliente, Projeto, Tarefa } from "@/model/types";
+import { destroyCookie, setCookie } from "nookies";
+import { toast } from "react-toastify";
+import Router from "next/router";
 
 type AuthContextData = {
-  getClientes: () => Promise<Cliente[]>;
-  getProjetos: () => Promise<Projeto[]>;
-  getTarefas: () => Promise<Tarefa[]>;
-  createTarefa: (tarefa: Tarefa) => Promise<Tarefa>;
-  updateTarefa: (tarefa: Tarefa) => Promise<Tarefa>;
-  updateProjetoStatus: (id: number, projeto: Projeto) => Promise<Projeto>;
+  usuario: UsuarioProps;
+  isAuthenticated: boolean;
+  signIn: (credentials: SignInProps) => Promise<void>;
+  signOut: () => void;
 };
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
+type UsuarioProps = {
+  id: number;
+  name: string;
+  email: string;
+  token: string;
+  role: string;
+  confirmMail: boolean;
+};
+
+type SignInProps = {
+  username: string;
+  password: string;
+};
+
 export const AuthContexts = createContext({} as AuthContextData);
 
+export function signOut() {
+  try {
+    destroyCookie(undefined, '@nextauth.consultores.token');
+    Router.push('/');
+  } catch {
+    console.error('Erro ao deslogar');
+  }
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
-  async function getClientes() {
-    const response = await api.get('/clientes');
-    return response.data as Cliente[];
-  }
+  const [usuario, setUsuario] = useState<UsuarioProps>();
 
-  async function getProjetos() {
-    const response = await api.get('/projetos');
-    return response.data as Projeto[];
-  }
+  const isAuthenticated = !!usuario;
 
-  async function getTarefas() {
-    const response = await api.get('/atividades');
-    return response.data as Tarefa[];
-  }
+  async function signIn({ username, password }: SignInProps) {
+    try {
+      const response = await api.post("/auth/signin", {
+        username,
+        password,
+      });
 
-  async function createTarefa(tarefa: Tarefa) {
-    const response = await api.post('/atividades', tarefa);
-    return response.data as Tarefa;
-  }
+      const { id, name, email, token, role, confirmMail } = response.data;
 
-  async function updateTarefa(tarefa: Tarefa) {
-    const response = await api.put(`/atividades/${tarefa.id}`, tarefa);
-    return response.data as Tarefa;
-  }
+      if (window) {
+        sessionStorage.setItem("token", response.data.token);
+      }
 
-  async function updateProjetoStatus(id: number, projeto: Projeto) {
-    const response = await api.put(`/projetos/${id}/status`, projeto);
-    return response.data as Projeto;
+      setUsuario({
+        id,
+        name,
+        email,
+        token,
+        role,
+        confirmMail,
+      });
+
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+
+      if (role) {
+        setCookie(undefined, "@nextauth.consultores.token", token, {
+          maxAge: 60 * 60 * 24 * 30,
+          path: "/",
+        });
+        Router.push({ pathname: "/chat" });
+        toast.success("Bem vindo à administração do sistema.");
+        return;
+      }
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      throw new Error("Failed to sign in");
+    }
   }
 
   return (
-    <AuthContexts.Provider value={{ getClientes, getProjetos, getTarefas, createTarefa, updateTarefa, updateProjetoStatus }}>
+    <AuthContexts.Provider
+      value={{
+        usuario,
+        isAuthenticated,
+        signIn,
+        signOut,
+      }}
+    >
       {children}
     </AuthContexts.Provider>
   );
