@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get('@nextauth.token');
+  const token = req.cookies.get('@nextauth.consultores.token');
   const signInURL = new URL('/', req.url);
 
   // Se o token não existir, redirecionar para login
@@ -24,29 +24,20 @@ export function middleware(req: NextRequest) {
       const response = NextResponse.redirect(new URL('/', req.url));
 
       // Remove o cookie expirado
-      response.cookies.set('@nextauth.token', '', { maxAge: 0 });
+      response.cookies.set('@nextauth.consultores.token', '', { maxAge: 0 });
       return response;
     }
   } catch (error) {
     console.error('Erro ao decodificar o token, redirecionando para login...', error);
     const response = NextResponse.redirect(new URL('/', req.url));
-    response.cookies.set('@nextauth.token', '', { maxAge: 0 });
+    response.cookies.set('@nextauth.consultores.token', '', { maxAge: 0 });
     return response;
   }
 
   // Verificar se a rota é pública
   const publicRoutes = [
     '/',
-    '/signup',
-    '/forgotpassword',
-    '/resetpassword',
-    '/tecnologiasderastreamento',
-    '/politicadeprivacidade',
-    '/politicadecookies',
-    '/paymentuser',
-    '/payment',
-    '/manual',
-    '/codigo',
+    '/cadastro',
   ];
   const isPublicRoute = publicRoutes.some((route) => req.nextUrl.pathname.startsWith(route));
 
@@ -60,5 +51,5 @@ export function middleware(req: NextRequest) {
 
 // Configuração de rotas
 export const config = {
-  matcher: ['/','/dashboard/:path*', '/ganhos', '/metas', '/gastos', '/perfil', '/paymentauth', '/'], // Rotas protegidas e públicas
+  matcher: ['/','/chat'],
 };

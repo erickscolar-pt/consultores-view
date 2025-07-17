@@ -5,7 +5,7 @@ const useChatSocket = (userId: string) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = io('http://localhost:3001', { transports: ['websocket'] });
+    const socketInstance = io('http://localhost:3010', { transports: ['websocket'] });
 
     socketInstance.on('connect', () => {
       console.log('Connected to chat server');
