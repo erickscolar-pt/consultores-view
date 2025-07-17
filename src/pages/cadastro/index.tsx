@@ -1,9 +1,12 @@
 // pages/cadastro.js
 import { setupAPIClient } from "@/services/api";
 import { canSSRAuth } from "@/utils/canSSRAuth";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import imgPig from "../../../public/icon-pig.png";
 
 export default function Cadastro() {
   const [step, setStep] = useState(1);
@@ -230,9 +233,9 @@ export default function Cadastro() {
             )}
           </form>
           <div className="mt-4 text-center">
-            <a href="/" className="text-primary hover:underline">
+            <Link href="/" className="text-primary hover:underline">
               Voltar para Login
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -240,7 +243,7 @@ export default function Cadastro() {
       {/* Lado Direito: Logo da ContaPlus */}
       <div className="w-1/2 bg-colorLogo flex items-center justify-center">
         <div className="text-white text-center">
-          <img src="/icon-pig.png" alt="Logo da ContaPlus" className="w-full" />
+          <Image src={imgPig} alt="Logo da Conta Plus" />
         </div>
       </div>
     </div>

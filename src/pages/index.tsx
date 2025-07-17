@@ -4,6 +4,9 @@ import { canSSRGuest } from "@/utils/canSSRGuest";
 import { FormEvent, useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import pigImage from "../../public/icon-pig.png";
+import Image from "next/image";
+import Link from "next/link";
 
 type loginFormProps = {
   email: string;
@@ -87,9 +90,9 @@ export default function Home() {
               Entrar
             </button>
             <div className="mt-4 text-center">
-              <a href="/cadastro" className="text-primary hover:underline">
+              <Link href="/cadastro" className="text-primary hover:underline">
                 Não tem uma conta? Cadastre-se aqui.
-              </a>
+              </Link>
             </div>
           </form>
         </div>
@@ -98,7 +101,11 @@ export default function Home() {
       {/* Lado Direito: Logo da ContaPlus */}
       <div className="hidden md:flex w-1/2 bg-colorLogo items-center justify-center">
         <div className="text-white text-center">
-          <img src="/icon-pig.png" alt="Logo da ContaPlus" className="w-full" />
+          <Image
+            src={pigImage}
+            alt="Logo da Conta Plus"
+            className="w-full"
+          />
         </div>
       </div>
     </div>
