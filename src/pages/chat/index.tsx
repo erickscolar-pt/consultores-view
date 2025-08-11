@@ -209,13 +209,13 @@ export default function Chat({ usuario }: Chat) {
   };
 
   return (
-    <div className="flex flex-col p-4 space-y-4 h-screen">
-      <div className="flex space-x-4 h-full">
+    <div className="flex flex-col p-2 md:p-4 space-y-2 md:space-y-4 h-screen">
+      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 h-full">
         {/* Lista de Conversas */}
-        <div className="w-1/4 bg-gray-100 p-4 rounded-lg flex flex-col justify-between shadow-md">
+        <div className="w-full md:w-1/4 bg-gray-100 p-2 md:p-4 rounded-lg flex flex-col justify-between shadow-md mb-2 md:mb-0">
           <div className="h-full flex flex-col">
             <h3 className="font-semibold mb-2">Lista de Conversas</h3>
-            <ul className="space-y-2 overflow-y-auto max-h-[calc(100%-3rem)]">
+            <ul className="space-y-2 overflow-y-auto max-h-40 md:max-h-[calc(100%-3rem)]">
               {conversations.map((convo) => (
                 <li
                   key={convo.id}
@@ -238,13 +238,13 @@ export default function Chat({ usuario }: Chat) {
         </div>
 
         {/* Área de Mensagens */}
-        <div className="w-3/4 bg-white p-4 rounded-lg shadow-md flex flex-col">
+        <div className="w-full md:w-3/4 bg-white p-2 md:p-4 rounded-lg shadow-md flex flex-col flex-1">
           {currentConversation ? (
             <>
               <h3 className="text-xl font-semibold">
                 Conversa com {currentConversation.name}
               </h3>
-              <div className="space-y-2 mt-4 flex-1 overflow-y-auto max-h-[calc(100%-6rem)]">
+              <div className="space-y-2 mt-4 flex-1 overflow-y-auto max-h-80 md:max-h-[calc(100%-6rem)]">
                 {currentConversation.messages.map((msg) => (
                   <div
                     key={msg.id}
